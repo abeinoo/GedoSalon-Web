@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#262626"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </linearGradient>
+    
+    <radialGradient id="v3" cx="500.0" cy="375.0" r="750.0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.55"/>
+    </radialGradient>
+    
+    </defs>
+  <rect width="1000" height="750" fill="url(#bg3)"/>
+  <g stroke="#9a9a9a" stroke-width="5" fill="none" opacity="0.55" stroke-linecap="round" stroke-linejoin="round" transform="translate(500,375)">
+    
+<circle cx="0" cy="0" r="55"/>
+<line x1="0" y1="-100" x2="0" y2="-130"/>
+<line x1="0" y1="100" x2="0" y2="130"/>
+<line x1="-100" y1="0" x2="-130" y2="0"/>
+<line x1="100" y1="0" x2="130" y2="0"/>
+<line x1="-70" y1="-70" x2="-92" y2="-92"/>
+<line x1="70" y1="-70" x2="92" y2="-92"/>
+<line x1="-70" y1="70" x2="-92" y2="92"/>
+<line x1="70" y1="70" x2="92" y2="92"/>
+
+  </g>
+  <rect width="1000" height="750" fill="url(#v3)"/>
+</svg>

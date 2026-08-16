@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1125" viewBox="0 0 900 1125">
+  <defs>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="0% 100%"><stop offset="0%" stop-color="#2b2b2b"/><stop offset="100%" stop-color="#0c0c0c"/></linearGradient>
+    
+    <radialGradient id="v3" cx="450.0" cy="562.5" r="843.75" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.55"/>
+    </radialGradient>
+    
+  </defs>
+  <rect width="900" height="1125" fill="url(#g3)"/>
+  <g stroke="#8a8a8a" stroke-width="3" fill="none" opacity="0.55" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="450" cy="430" r="145"/>
+    <path d="M 260 900 C 260 680 340 580 450 580 C 560 580 640 680 640 900" />
+    <path d="M 340 720 L 560 720" opacity="0.4"/>
+  </g>
+  <rect width="900" height="1125" fill="url(#v3)"/>
+  <text x="60" y="1065" font-family="Arial, sans-serif" font-size="34" letter-spacing="4" fill="#ffffff" opacity="0.5">MD</text>
+</svg>
