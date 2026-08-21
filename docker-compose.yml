@@ -16,3 +16,4 @@ services:
       # file) to change where these live on the host; defaults below.
       - ${DATA_DIR:-/opt/gedosalon/data}:/data
       - ${UPLOADS_DIR:-/opt/gedosalon/uploads}:/app/public/uploads
+      - ${UPLOADS_DIR:-/opt/gedosalon/uploads}:/app/.next/standalone/public/uploads 
