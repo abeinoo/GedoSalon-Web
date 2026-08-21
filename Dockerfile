@@ -15,6 +15,8 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/lib/generated ./lib/generated
+
 COPY . .
 
 RUN npm run build
@@ -32,6 +34,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/lib/generated ./lib/generated
 
 EXPOSE 3000
 
