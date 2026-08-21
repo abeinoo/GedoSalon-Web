@@ -19,6 +19,7 @@ import { getActiveBarbers, getSeoSettings } from "@/lib/public-content";
 // saves something. This time-based revalidation is a safety net for that
 // specific gap (confirmed live against an actual Docker deploy), on top of
 // the immediate on-demand revalidation admin edits already trigger.
+export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
