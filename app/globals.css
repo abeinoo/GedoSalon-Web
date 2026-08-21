@@ -17,3 +17,95 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Continuous-scroll sections (Services/Barbers/Branches/Gallery).
+ *
+ * The track renders its item list twice back-to-back and animates from
+ * translateX(0) to translateX(-50%) — since the duplicated content makes
+ * the track exactly 2x one set's width, -50% is exactly one set's width,
+ * so the loop point is pixel-identical to the start: no visible jump,
+ * works for any item count without placeholder padding.
+ *
+ * The animation only runs on devices that can actually hover a mouse
+ * (`hover: hover` + `pointer: fine`) and don't prefer reduced motion —
+ * everywhere else (touch/mobile, or reduced-motion) `.marquee-viewport`
+ * is just a plain horizontally-scrollable container, so touch/swipe and
+ * keyboard/trackpad scrolling always work unobstructed by the animation.
+ */
+.marquee-viewport {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Establishes a size-query container at this element's own (definite,
+   * normal-block-layout) width, so the `cqw` units on the cards inside
+   * `.marquee-track` resolve against *this* box — not against the track,
+   * which is deliberately `width: max-content` and therefore has no
+   * definite width of its own for a percentage to resolve against. Using
+   * plain `%` here was the actual root cause of the sizing regression:
+   * percentages need a definite containing-block width, max-content
+   * sizing computes that width *from* the children, and browsers resolve
+   * that circular dependency by collapsing the percentage toward the
+   * card's tiny min-content size — confirmed live (a card that should
+   * have rendered at ~404px measured at ~93px before this fix). `cqw` is
+   * immune to that because it resolves against the nearest `container`
+   * ancestor regardless of the immediate parent's own sizing algorithm.
+   */
+  container-type: inline-size;
+}
+.marquee-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .marquee-track[data-animate="true"] {
+    animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
+  }
+  /* Deliberately left as overflow-x: auto rather than hidden — the
+   * scrollbar is already hidden above, so visually it looks identical,
+   * but this keeps native scrollBy()/trackpad/keyboard scrolling
+   * available at all times (used by Barbers' left/right arrows) without
+   * it fighting the transform animation, since hovering the viewport to
+   * reach an arrow button always pauses the animation first. */
+  .marquee-viewport:hover [data-animate="true"] {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
+  .marquee-viewport {
+    overflow-x: auto !important;
+  }
+}
+
+/* The track renders the item list twice (for the seamless-loop trick
+ * above), but that second copy should only ever be visible when the
+ * animation is actually running — otherwise a touch/mobile user manually
+ * swiping through a plain scrollable row would swipe past the real items
+ * and hit what looks like the same content repeated. Hidden by default;
+ * shown only under the exact conditions the animation itself runs under. */
+.marquee-duplicate {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .marquee-duplicate {
+    display: flex;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

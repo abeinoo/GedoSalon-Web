@@ -1,23 +1,13 @@
 import Image from "next/image";
-import { siteContent } from "@/lib/content";
+import { getActiveAbout, getBusinessInfo } from "@/lib/public-content";
+import LocalizedLine from "./LocalizedLine";
 
-const ARABIC_PATTERN = /[؀-ۿ]/;
+export default async function About() {
+  const [about, businessInfo] = await Promise.all([getActiveAbout(), getBusinessInfo()]);
 
-function LocalizedLine({ text, className = "" }: { text: string; className?: string }) {
-  const isArabic = ARABIC_PATTERN.test(text);
-  // dir/lang keep Arabic character shaping and word order correct, while
-  // text-left keeps every line flush with the label above it — so the
-  // block reads cleanly inside this left-to-right layout.
-  return (
-    <p dir={isArabic ? "rtl" : "ltr"} lang={isArabic ? "ar" : "en"} className={`text-left ${className}`}>
-      {text}
-    </p>
-  );
-}
+  if (!about) return null;
 
-export default function About() {
-  const { about } = siteContent;
-  const { businessInfo } = about;
+  const paragraphs = [about.description, about.secondaryDescription];
 
   return (
     <section id="about" className="bg-white py-16 sm:py-20">
@@ -41,7 +31,7 @@ export default function About() {
           <span className="mt-4 block h-0.5 w-10 bg-neutral-900" />
 
           <div className="mt-6 flex flex-col gap-4">
-            {about.paragraphs.map((paragraph) => (
+            {paragraphs.map((paragraph) => (
               <p key={paragraph} className="text-sm leading-relaxed text-neutral-600 sm:text-base">
                 {paragraph}
               </p>
@@ -49,59 +39,59 @@ export default function About() {
           </div>
 
           <a
-            href={about.ctaHref}
+            href={about.buttonUrl}
             className="mt-8 inline-flex w-fit items-center rounded-full border border-neutral-400 px-7 py-3 text-xs font-medium tracking-widest text-neutral-800 transition hover:border-neutral-900 hover:bg-neutral-900 hover:text-white"
           >
-            {about.ctaLabel}
+            {about.buttonText}
           </a>
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-        <div className="mt-16 border-t border-neutral-200 pt-10 lg:mt-20 lg:pt-12">
-          <p className="text-xs font-medium tracking-[0.3em] text-neutral-500">OFFICIAL BUSINESS INFORMATION</p>
+      {businessInfo && (
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <div className="mt-16 border-t border-neutral-200 pt-10 lg:mt-20 lg:pt-12">
+            <p className="text-xs font-medium tracking-[0.3em] text-neutral-500">OFFICIAL BUSINESS INFORMATION</p>
 
-          <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <p className="text-xs font-semibold tracking-widest text-neutral-500">
-                {businessInfo.legalNameLabel}
-              </p>
-              <LocalizedLine text={businessInfo.legalName} className="mt-2 text-sm font-medium text-neutral-900" />
-            </div>
-
-            <div>
-              <p className="text-xs font-semibold tracking-widest text-neutral-500">{businessInfo.addressLabel}</p>
-              <div className="mt-2 flex flex-col gap-0.5">
-                {businessInfo.addressLines.map((line) => (
-                  <LocalizedLine key={line} text={line} className="text-sm text-neutral-700" />
-                ))}
+            <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <p className="text-xs font-semibold tracking-widest text-neutral-500">Legal Business Name</p>
+                <LocalizedLine text={businessInfo.legalName} className="mt-2 text-sm font-medium text-neutral-900" />
               </div>
-            </div>
 
-            <div>
-              <p className="text-xs font-semibold tracking-widest text-neutral-500">{businessInfo.phoneLabel}</p>
-              <a
-                href={`tel:${businessInfo.phone.replace(/\s+/g, "")}`}
-                className="mt-2 block text-sm text-neutral-700 transition hover:text-neutral-900"
-              >
-                {businessInfo.phone}
-              </a>
-            </div>
+              <div>
+                <p className="text-xs font-semibold tracking-widest text-neutral-500">Address</p>
+                <div className="mt-2 flex flex-col gap-0.5">
+                  {businessInfo.address.split("\n").map((line) => (
+                    <LocalizedLine key={line} text={line} className="text-sm text-neutral-700" />
+                  ))}
+                </div>
+              </div>
 
-            <div>
-              <p className="text-xs font-semibold tracking-widest text-neutral-500">{businessInfo.websiteLabel}</p>
-              <a
-                href={businessInfo.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 block text-sm text-neutral-700 transition hover:text-neutral-900"
-              >
-                {businessInfo.website}
-              </a>
+              <div>
+                <p className="text-xs font-semibold tracking-widest text-neutral-500">Business Phone</p>
+                <a
+                  href={`tel:${businessInfo.phone.replace(/\s+/g, "")}`}
+                  className="mt-2 block text-sm text-neutral-700 transition hover:text-neutral-900"
+                >
+                  {businessInfo.phone}
+                </a>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold tracking-widest text-neutral-500">Website</p>
+                <a
+                  href={businessInfo.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 block text-sm text-neutral-700 transition hover:text-neutral-900"
+                >
+                  {businessInfo.website}
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.gedosalons.com"),
   title: "Gedo Salon | Premium Men's Grooming",
   description: "It's not just a look, It's a feeling. Premium men's grooming and barbershop in Cairo.",
 };

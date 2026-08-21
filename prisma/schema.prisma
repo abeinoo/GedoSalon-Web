@@ -1,0 +1,168 @@
+// Prisma schema for the Gedo Salon admin panel (Phase 2).
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model AdminUser {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String
+  // Bumped whenever the password changes (or the account is otherwise
+  // force-logged-out). Session JWTs embed the version they were issued
+  // under; verifySession() rejects any session whose version doesn't
+  // match the current value, which is how we revoke already-issued
+  // sessions without a server-side session store.
+  sessionVersion Int      @default(0)
+  // Deactivating (rather than deleting) an admin account immediately
+  // invalidates all of its sessions via the same verifySession() check.
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Singleton row (id is always "main") holding the public About Us section.
+model AboutContent {
+  id                   String   @id @default("main")
+  label                String
+  title                String
+  description          String
+  secondaryDescription String
+  image                String
+  buttonText           String
+  buttonUrl            String
+  isActive             Boolean  @default(true)
+  updatedAt            DateTime @updatedAt
+}
+
+model Service {
+  id           String   @id @default(cuid())
+  name         String
+  description  String
+  price        Float
+  image        String
+  category     String
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Offer {
+  id           String    @id @default(cuid())
+  title        String
+  description  String
+  discount     String
+  price        Float?
+  image        String
+  startDate    DateTime?
+  endDate      DateTime?
+  displayOrder Int       @default(0)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// Singleton (id = "hero"), the top-of-page banner. No isActive: there's no
+// meaningful "off" state for the page's hero.
+model HeroContent {
+  id           String   @id @default("hero")
+  label        String
+  headingLine1 String
+  headingLine2 String
+  subtitle     String
+  ctaLabel     String
+  ctaHref      String
+  image        String
+  updatedAt    DateTime @updatedAt
+}
+
+// Singleton (id = "main"). Single source of truth for legal/contact facts,
+// consumed by both the public About block and the Footer.
+model BusinessInfo {
+  id             String   @id @default("main")
+  legalName      String
+  address        String
+  phone          String
+  whatsappNumber String
+  whatsappHref   String
+  email          String
+  website        String
+  updatedAt      DateTime @updatedAt
+}
+
+// Singleton (id = "main"). Footer-only presentation copy; facts live in BusinessInfo.
+model FooterSettings {
+  id            String   @id @default("main")
+  tagline       String
+  copyrightText String
+  updatedAt     DateTime @updatedAt
+}
+
+// Singleton (id = "main"). Feeds generateMetadata() for the homepage.
+model SeoSettings {
+  id              String   @id @default("main")
+  metaTitle       String
+  metaDescription String
+  ogImage         String?
+  keywords        String?
+  updatedAt       DateTime @updatedAt
+}
+
+model SocialLink {
+  id           String   @id @default(cuid())
+  platform     String
+  href         String
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model OpeningHours {
+  id           String   @id @default(cuid())
+  label        String
+  value        String
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Branch {
+  id           String   @id @default(cuid())
+  name         String
+  location     String
+  image        String
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Barber {
+  id           String   @id @default(cuid())
+  name         String
+  title        String
+  image        String
+  bookHref     String
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model GalleryImage {
+  id           String   @id @default(cuid())
+  image        String
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

@@ -1,6 +1,11 @@
 import { siteContent } from "@/lib/content";
 import { serviceIconMap } from "./icons";
 
+// Pure-display category strip — deliberately NOT driven by the CMS
+// `Service` model (which still exists, is fully manageable in
+// /admin/services, and can be used elsewhere later). This section shows a
+// fixed set of service-category icons + labels only: no photos, no price,
+// no description, no card, and no interaction on individual items.
 export default function Services() {
   const { services } = siteContent;
 
@@ -16,21 +21,12 @@ export default function Services() {
           {services.items.map((item) => {
             const Icon = serviceIconMap[item.icon];
             return (
-              <div key={item.title} className="flex flex-col items-center gap-3 text-center">
+              <div key={item.title} className="flex cursor-default flex-col items-center gap-3 text-center">
                 <Icon className="h-9 w-9 text-neutral-700" />
                 <span className="text-xs font-semibold tracking-widest text-neutral-800">{item.title}</span>
               </div>
             );
           })}
-        </div>
-
-        <div className="mt-12 flex justify-center">
-          <a
-            href={services.viewAllHref}
-            className="rounded-full border border-neutral-400 px-6 py-2.5 text-xs font-medium tracking-widest text-neutral-800 transition hover:border-neutral-900 hover:bg-neutral-900 hover:text-white"
-          >
-            {services.viewAllLabel}
-          </a>
         </div>
       </div>
     </section>

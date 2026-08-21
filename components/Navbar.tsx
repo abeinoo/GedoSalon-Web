@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { navLinks, siteContent } from "@/lib/content";
+import { navLinks, siteContent, bookingHref } from "@/lib/content";
 import { CloseIcon, MenuIcon } from "./icons";
 
 export default function Navbar() {
@@ -38,7 +38,7 @@ export default function Navbar() {
         </ul>
 
         <a
-          href={siteContent.hero.ctaHref}
+          href={bookingHref}
           target="_blank"
           rel="noopener noreferrer"
           className="hidden shrink-0 rounded-full border border-white/70 px-6 py-2.5 text-xs font-medium tracking-widest text-white transition hover:bg-white hover:text-black lg:inline-block"
@@ -86,7 +86,7 @@ export default function Navbar() {
           </ul>
 
           <a
-            href={siteContent.hero.ctaHref}
+            href={bookingHref}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}

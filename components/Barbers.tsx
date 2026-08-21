@@ -4,13 +4,18 @@ import { useRef } from "react";
 import Image from "next/image";
 import { siteContent } from "@/lib/content";
 import { ChevronLeftIcon, ChevronRightIcon } from "./icons";
+import type { Barber } from "@/lib/generated/prisma/client";
 
-export default function Barbers() {
+export default function Barbers({ items }: { items: Barber[] }) {
   const { barbers } = siteContent;
-  const trackRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  if (items.length === 0) return null;
+
+  const duration = Math.max(items.length * 4, 20);
 
   const scroll = (direction: 1 | -1) => {
-    trackRef.current?.scrollBy({ left: direction * 280, behavior: "smooth" });
+    viewportRef.current?.scrollBy({ left: direction * 280, behavior: "smooth" });
   };
 
   return (
@@ -31,35 +36,43 @@ export default function Barbers() {
             <ChevronLeftIcon className="h-5 w-5" />
           </button>
 
-          <div
-            ref={trackRef}
-            className="flex gap-4 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {barbers.items.map((barber) => (
-              <div
-                key={barber.name}
-                className="group relative aspect-[4/5] w-[45%] shrink-0 overflow-hidden sm:w-[28%] lg:w-[16%]"
-              >
-                <Image
-                  src={barber.image}
-                  alt={barber.name}
-                  fill
-                  sizes="(min-width: 1024px) 16vw, (min-width: 640px) 28vw, 45vw"
-                  className="object-cover grayscale transition duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 p-3 text-center">
-                  <p className="text-sm font-bold tracking-wide text-white">{barber.name}</p>
-                  <p className="text-[10px] tracking-wide text-white/70">{barber.title}</p>
-                  <a
-                    href={barber.bookHref}
-                    className="mt-1 w-full rounded-sm bg-white/15 px-2 py-1.5 text-[10px] font-medium tracking-widest text-white backdrop-blur-sm transition hover:bg-white hover:text-black"
+          <div ref={viewportRef} className="marquee-viewport" data-animate="true">
+            <div
+              className="marquee-track gap-4 pb-2"
+              data-animate="true"
+              style={{ ["--marquee-duration" as string]: `${duration}s` }}
+            >
+              {[items, items].map((set, setIndex) =>
+                set.map((barber) => (
+                  <div
+                    key={`${setIndex}-${barber.id}`}
+                    aria-hidden={setIndex === 1}
+                    className={`group relative aspect-[4/5] w-[45cqw] shrink-0 overflow-hidden sm:w-[28cqw] lg:w-[16cqw] ${
+                      setIndex === 1 ? "marquee-duplicate" : ""
+                    }`}
                   >
-                    BOOK WITH HIM
-                  </a>
-                </div>
-              </div>
-            ))}
+                    <Image
+                      src={barber.image}
+                      alt={barber.name}
+                      fill
+                      sizes="(min-width: 1024px) 16vw, (min-width: 640px) 28vw, 45vw"
+                      className="object-cover grayscale transition duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 p-3 text-center">
+                      <p className="text-sm font-bold tracking-wide text-white">{barber.name}</p>
+                      <p className="text-[10px] tracking-wide text-white/70">{barber.title}</p>
+                      <a
+                        href={barber.bookHref}
+                        className="mt-1 w-full rounded-sm bg-white/15 px-2 py-1.5 text-[10px] font-medium tracking-widest text-white backdrop-blur-sm transition hover:bg-white hover:text-black"
+                      >
+                        BOOK WITH HIM
+                      </a>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
 
           <button
@@ -70,15 +83,6 @@ export default function Barbers() {
           >
             <ChevronRightIcon className="h-5 w-5" />
           </button>
-        </div>
-
-        <div className="mt-10 flex justify-center">
-          <a
-            href={barbers.viewAllHref}
-            className="rounded-full border border-neutral-400 px-6 py-2.5 text-xs font-medium tracking-widest text-neutral-800 transition hover:border-neutral-900 hover:bg-neutral-900 hover:text-white"
-          >
-            {barbers.viewAllLabel}
-          </a>
         </div>
       </div>
     </section>

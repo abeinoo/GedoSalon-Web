@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { siteContent } from "@/lib/content";
+import { getHero } from "@/lib/public-content";
 import { ArrowRightIcon } from "./icons";
 
-export default function Hero() {
-  const { hero } = siteContent;
+export default async function Hero() {
+  const hero = await getHero();
+
+  if (!hero) return null;
 
   return (
     <section id="home" className="relative flex h-[68vh] min-h-[500px] w-full items-center overflow-hidden bg-black">
@@ -35,11 +37,8 @@ export default function Hero() {
           className="mt-4 font-sans text-6xl font-bold leading-[0.95] tracking-tight text-white sm:text-7xl md:text-8xl"
           style={{ textShadow: "0 4px 24px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.6)" }}
         >
-          {hero.headingLines.map((line) => (
-            <span key={line} className="block">
-              {line}
-            </span>
-          ))}
+          <span className="block">{hero.headingLine1}</span>
+          <span className="block">{hero.headingLine2}</span>
         </h1>
         <p
           className="mt-5 text-base text-white/85 sm:text-lg"

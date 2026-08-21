@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      target: runner
+    image: gedosalon:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
+    volumes:
+      # Host bind-mounts (not named volumes) so the backup/restore scripts
+      # in scripts/ can operate on plain host paths with no `docker exec`.
+      # Set DATA_DIR/UPLOADS_DIR in your shell (or a .env next to this
+      # file) to change where these live on the host; defaults below.
+      - ${DATA_DIR:-/opt/gedosalon/data}:/data
+      - ${UPLOADS_DIR:-/opt/gedosalon/uploads}:/app/public/uploads

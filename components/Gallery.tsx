@@ -1,8 +1,14 @@
 import Image from "next/image";
 import { siteContent } from "@/lib/content";
+import { getActiveGalleryImages } from "@/lib/public-content";
 
-export default function Gallery() {
+export default async function Gallery() {
   const { gallery } = siteContent;
+  const images = await getActiveGalleryImages();
+
+  if (images.length === 0) return null;
+
+  const duration = Math.max(images.length * 3, 18);
 
   return (
     <section id="gallery" className="bg-neutral-100 py-16 sm:py-20">
@@ -12,27 +18,32 @@ export default function Gallery() {
           <span className="mx-auto mt-3 block h-0.5 w-10 bg-neutral-900" />
         </h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {gallery.images.map((src, i) => (
-            <div key={src} className="group relative aspect-square overflow-hidden">
-              <Image
-                src={src}
-                alt={`Gedo Salon haircut style ${i + 1}`}
-                fill
-                sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover grayscale transition duration-500 group-hover:scale-105"
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 flex justify-center">
-          <a
-            href={gallery.viewAllHref}
-            className="rounded-full border border-neutral-400 px-6 py-2.5 text-xs font-medium tracking-widest text-neutral-800 transition hover:border-neutral-900 hover:bg-neutral-900 hover:text-white"
+        <div className="marquee-viewport mt-12" data-animate="true">
+          <div
+            className="marquee-track gap-3"
+            data-animate="true"
+            style={{ ["--marquee-duration" as string]: `${duration}s` }}
           >
-            {gallery.viewAllLabel}
-          </a>
+            {[images, images].map((set, setIndex) =>
+              set.map((image, i) => (
+                <div
+                  key={`${setIndex}-${image.id}`}
+                  aria-hidden={setIndex === 1}
+                  className={`group relative aspect-square w-[42cqw] shrink-0 overflow-hidden sm:w-[28cqw] lg:w-[15cqw] ${
+                    setIndex === 1 ? "marquee-duplicate" : ""
+                  }`}
+                >
+                  <Image
+                    src={image.image}
+                    alt={`Gedo Salon haircut style ${i + 1}`}
+                    fill
+                    sizes="(min-width: 1024px) 15vw, (min-width: 640px) 28vw, 42vw"
+                    className="object-cover grayscale transition duration-500 group-hover:scale-105"
+                  />
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.env
+.env.*
+!.env.example
+dev.db
+dev.db-journal
+public/uploads
+lib/generated
+npm-debug.log*
+.DS_Store
+*.md
+.claude
+.agents
+.windsurf
