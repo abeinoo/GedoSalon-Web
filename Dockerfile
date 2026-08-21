@@ -19,7 +19,7 @@ COPY --from=deps /app/lib/generated ./lib/generated
 
 COPY . .
 
-RUN npm run build
+RUN SESSION_SECRET=build-only-secret npm run build
 
 
 FROM node:22-alpine AS runner
