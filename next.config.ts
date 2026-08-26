@@ -27,6 +27,13 @@ const nextConfig: NextConfig = {
   // (Confirmed by inspecting the standalone build output directly.) The
   // Dockerfile also copies better-sqlite3 in explicitly as a second,
   // environment-independent safety net.
+
+  serverExternalPackages: [
+  "@prisma/client",
+  "@prisma/adapter-better-sqlite3",
+  "better-sqlite3",
+],
+
   outputFileTracingIncludes: {
     "/*": ["./node_modules/better-sqlite3/**/*", "./node_modules/bindings/**/*", "./node_modules/file-uri-to-path/**/*"],
   },
