@@ -37,6 +37,11 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/lib ./lib
 
+# Make runtime uploads available to Next.js standalone image optimizer
+RUN mkdir -p /app/.next/standalone/public \
+    && rm -rf /app/.next/standalone/public/uploads \
+    && ln -s /app/public/uploads /app/.next/standalone/public/uploads
+    
 EXPOSE 3000
 
 CMD ["npm", "start"]
