@@ -47,12 +47,12 @@ export default async function Home() {
       <main>
         <Hero />
         <Services />
-        <Offers />
-        <About />
-        <Barbers items={barbers} />
         <Branches />
-        <Features />
+        <Offers />
         <Gallery />
+        <Barbers items={barbers} />
+        <About />
+        <Features />
       </main>
       <Footer />
     </>
