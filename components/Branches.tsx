@@ -39,7 +39,7 @@ export default async function Branches() {
                     alt={branch.name}
                     fill
                     sizes="(min-width: 1024px) 23vw, (min-width: 640px) 42vw, 62vw"
-                    className="object-cover grayscale transition duration-500 group-hover:scale-105"
+                    className="object-cover transition duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-black/45 transition group-hover:bg-black/55" />
                   <div className="absolute inset-x-0 bottom-0 p-4">
