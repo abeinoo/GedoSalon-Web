@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/AppImage";
 import { getHero } from "@/lib/public-content";
 import { ArrowRightIcon } from "./icons";
 

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/AppImage";
 import { getActiveAbout, getBusinessInfo } from "@/lib/public-content";
 import LocalizedLine from "./LocalizedLine";
 

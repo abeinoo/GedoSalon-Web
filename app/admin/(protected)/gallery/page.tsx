@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/AppImage";
 import { verifySession } from "@/lib/auth/dal";
 import { prisma } from "@/lib/db";
 import EmptyState from "@/components/admin/EmptyState";

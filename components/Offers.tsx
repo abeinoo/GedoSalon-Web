@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/AppImage";
 import { siteContent, bookingHref } from "@/lib/content";
 import { getActiveOffers } from "@/lib/public-content";
 

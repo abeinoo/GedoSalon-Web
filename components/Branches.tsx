@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/AppImage";
 import { siteContent } from "@/lib/content";
 import { getActiveBranches } from "@/lib/public-content";
 import { PinIcon } from "./icons";

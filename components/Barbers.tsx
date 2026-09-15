@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/AppImage";
 import { siteContent } from "@/lib/content";
 import { ChevronLeftIcon, ChevronRightIcon } from "./icons";
 import type { Barber } from "@/lib/generated/prisma/client";
